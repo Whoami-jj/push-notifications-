@@ -1,0 +1,2 @@
+/Users/junaid/flutter_push_notification/android/app/.cxx/Debug/4i6g4a1x/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/junaid/flutter_push_notification/android/app/.cxx/Debug/4i6g4a1x/arm64-v8a/CMakeFiles/rebuild_cache.dir

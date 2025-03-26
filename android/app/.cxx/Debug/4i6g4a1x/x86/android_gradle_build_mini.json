@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/junaid/fvm/versions/stable/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/junaid/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/junaid/flutter_push_notification/android/app/.cxx/Debug/4i6g4a1x/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/junaid/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/junaid/flutter_push_notification/android/app/.cxx/Debug/4i6g4a1x/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
