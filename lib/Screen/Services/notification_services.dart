@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -11,7 +12,11 @@ class NotificationServices {
 
 
   Future foregroundMessage() async {
-    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true, badge: true, sound: true);
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true
+    );
   }
 
   void requestNotificationPermission() async {
@@ -60,13 +65,22 @@ class NotificationServices {
     });
   }
 
-  void firebaseInit() {
+  void firebaseInit(BuildContext context) {  ///Physical device
+  // void firebaseInit() {
     FirebaseMessaging.onMessage.listen((message) {
+
       if (kDebugMode){
         print("title: ${message.notification!.title}");
         print("body: ${message.notification!.body}");
       }
-      showNotifications(message);
+      /// Physical device
+      if (Platform.isAndroid) {
+        initLocalNotification(message, context);
+        showNotifications(message);
+      }
+      ///
+
+      // showNotifications(message);
     });
   }
 

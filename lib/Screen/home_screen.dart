@@ -20,8 +20,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     notificationServices.requestNotificationPermission();
     // notificationServices.isTokenRefresh();
-    notificationServices.firebaseInit();
-    notificationServices.foregroundMessage();
+    // notificationServices.firebaseInit();
+    notificationServices.firebaseInit(context); ////Physical device
+    // notificationServices.foregroundMessage();
     notificationServices.getDeviceToken().then((value) {
       if (value != null) {
         print("Device Token: $value");
