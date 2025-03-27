@@ -65,41 +65,112 @@ class NotificationServices {
     });
   }
 
-  void firebaseInit(BuildContext context) {  ///Physical device
-  // void firebaseInit() {
+  // void firebaseInit(BuildContext context) {  ///Physical device
+  // // void firebaseInit() {
+  //   FirebaseMessaging.onMessage.listen((message) {
+  //
+  //     if (kDebugMode){
+  //       print("title: ${message.notification!.title}");
+  //       print("body: ${message.notification!.body}");
+  //     }
+  //     /// Physical device
+  //     if (Platform.isAndroid) {
+  //       initLocalNotification(message, context);
+  //       showNotifications(message);
+  //     }
+  //     ///
+  //
+  //     // showNotifications(message);
+  //   });
+  // }
+
+  // void firebaseInit(BuildContext context) {
+  //   FirebaseMessaging.onMessage.listen((message) {
+  //     if (kDebugMode) {
+  //       print("Message received: ${message.notification?.title}");
+  //     }
+  //
+  //     // Only show local notification if it's a data message
+  //     if (Platform.isAndroid) {
+  //       initLocalNotification(message, context);
+  //       showNotifications(message);
+  //     }
+  //   });
+  // }
+  // Future<void> showNotifications(RemoteMessage message) async {
+  //   AndroidNotificationChannel channel = AndroidNotificationChannel(
+  //       Random.secure().nextInt(1000).toString(), "High Importance Notifications", importance: Importance.max);
+  //   AndroidNotificationDetails androidNotificationDetails =
+  //   AndroidNotificationDetails(channel.id.toString(), channel.name.toString(),
+  //       channelDescription: "your channel description", importance:Importance.high,
+  //       priority: Priority.high, ticker: "ticker");
+  //   DarwinNotificationDetails darwinNotificationDetails = DarwinNotificationDetails(presentAlert: true,
+  //       presentBadge: true, presentSound: true);
+  //   NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: darwinNotificationDetails);
+  //
+  //   Future.delayed(Duration.zero, () {
+  //     flutterLocalNotificationsPlugin.show(
+  //         0, message.notification!.title, message.notification!.body, notificationDetails
+  //       // notificationDetails
+  //     );
+  //   });
+  // }
+
+  void firebaseInit(BuildContext context) {
     FirebaseMessaging.onMessage.listen((message) {
-
-      if (kDebugMode){
-        print("title: ${message.notification!.title}");
-        print("body: ${message.notification!.body}");
+      if (kDebugMode) {
+        print("Foreground Message: ${message.notification?.title}");
       }
-      /// Physical device
+
+      // Always show notification in foreground with popup
       if (Platform.isAndroid) {
-        initLocalNotification(message, context);
-        showNotifications(message);
+        showNotifications(
+            title: message.notification?.title,
+            body: message.notification?.body,
+            showPopup: true
+        );
       }
-      ///
-
-      // showNotifications(message);
     });
   }
 
-  Future<void> showNotifications(RemoteMessage message) async {
-    AndroidNotificationChannel channel = AndroidNotificationChannel(
-        Random.secure().nextInt(1000).toString(), "High Importance Notifications", importance: Importance.max);
-    AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails(channel.id.toString(), channel.name.toString(),
-        channelDescription: "your channel description", importance:Importance.high,
-        priority: Priority.high, ticker: "ticker");
-    DarwinNotificationDetails darwinNotificationDetails = DarwinNotificationDetails(presentAlert: true,
-        presentBadge: true, presentSound: true);
-    NotificationDetails notificationDetails = NotificationDetails(android: androidNotificationDetails, iOS: darwinNotificationDetails);
+  Future<void> showNotifications({
+    String? title,
+    String? body,
+    bool showPopup = false
+  }) async {
+    const AndroidNotificationChannel channel = AndroidNotificationChannel(
+        'high_importance_channel',
+        "High Importance Notifications",
+        importance: Importance.max
+    );
 
-    Future.delayed(Duration.zero, () {
-      flutterLocalNotificationsPlugin.show(
-          0, message.notification!.title, message.notification!.body, notificationDetails
-        // notificationDetails
-      );
-    });
+    AndroidNotificationDetails androidNotificationDetails = AndroidNotificationDetails(
+      channel.id,
+      channel.name,
+      channelDescription: "your channel description",
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: "ticker",
+      playSound: true,
+      enableVibration: true,
+      visibility: NotificationVisibility.public,
+      fullScreenIntent: showPopup, // Control popup behavior
+    );
+
+    NotificationDetails notificationDetails = NotificationDetails(
+      android: androidNotificationDetails,
+      iOS: const DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+      ),
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      title,
+      body,
+      notificationDetails,
+    );
   }
 }
